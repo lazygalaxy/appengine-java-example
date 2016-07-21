@@ -9,8 +9,6 @@
     <artifactId>appengine</artifactId>
 
     <properties>
-        <app.id>red-dominion-137722</app.id>
-        <app.version>1</app.version>
         <appengine.version>1.9.38</appengine.version>
         <gcloud.plugin.version>2.0.9.111.v20160527</gcloud.plugin.version>
 
