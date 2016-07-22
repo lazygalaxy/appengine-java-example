@@ -1,13 +1,14 @@
 package com.example.appengine;
 
-import com.google.api.server.spi.config.Api;
-import com.google.api.server.spi.config.ApiMethod;
-import com.google.api.server.spi.response.NotFoundException;
-import com.google.appengine.api.users.User;
-
 import java.util.ArrayList;
 
 import javax.inject.Named;
+
+import com.google.api.server.spi.config.Api;
+import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.response.NotFoundException;
+import com.google.api.server.spi.response.UnauthorizedException;
+import com.google.appengine.api.users.User;
 
 /**
  * Defines v1 of a helloworld API, which provides simple "greeting" methods.
@@ -48,7 +49,11 @@ public class Greetings {
 	}
 
 	@ApiMethod(name = "greetings.authed", path = "hellogreeting/authed")
-	public HelloGreeting authedGreeting(User user) {
+	public HelloGreeting authedGreeting(User user) throws UnauthorizedException {
+		if (user == null) {
+			throw new UnauthorizedException("Authorization required");
+		}
+
 		HelloGreeting response = new HelloGreeting("hello " + user.getEmail());
 		return response;
 	}
