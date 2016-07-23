@@ -1,21 +1,45 @@
 package com.example.appengine.calendar;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import org.joda.time.DateTime;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
+@Entity
 public class Calendar {
-	public List<Day> freeDays = new ArrayList<Day>();
+	final static public SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
 
-	public Calendar() {
-		this.freeDays.add(Day.get(new DateTime(2016, 3, 25, 0, 0)));
-		this.freeDays.add(Day.get(new DateTime(2016, 3, 26, 0, 0)));
-		this.freeDays.add(Day.get(new DateTime(2016, 3, 27, 0, 0)));
-		this.freeDays.add(Day.get(new DateTime(2016, 3, 28, 0, 0)));
+	@Id
+	private String userId;
+	private Date fromDate;
+	private Date toDate;
+
+	public Calendar(String userId) throws Exception {
+		this.userId = userId;
+
+		// TODO: get all weekends + public holidays for user country
+		this.fromDate = DATE_FORMAT.parse("20160326");
+		this.toDate = DATE_FORMAT.parse("20160327");
 	}
 
-	public void add(Day day) {
-		freeDays.add(day);
+	public String getUserId() {
+		return userId;
+	}
+
+	public Date getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	public Date getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
 	}
 }
