@@ -3,7 +3,7 @@ package com.example.appengine;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.example.appengine.calendar.Calendar;
+import com.example.appengine.domain.Calendar;
 import com.googlecode.objectify.ObjectifyService;
 
 /**

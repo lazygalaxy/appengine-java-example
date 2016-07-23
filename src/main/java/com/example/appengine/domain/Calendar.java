@@ -1,4 +1,4 @@
-package com.example.appengine.calendar;
+package com.example.appengine.domain;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,6 +14,10 @@ public class Calendar {
 	private String userId;
 	private Date fromDate;
 	private Date toDate;
+
+	@SuppressWarnings("unused")
+	private Calendar() {
+	}
 
 	public Calendar(String userId) throws Exception {
 		this.userId = userId;

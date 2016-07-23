@@ -1,12 +1,14 @@
-package com.example.appengine.calendar;
+package com.example.appengine.api;
 
 import javax.inject.Named;
 
 import com.example.appengine.Constants;
+import com.example.appengine.domain.Calendar;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.response.UnauthorizedException;
 import com.google.appengine.api.users.User;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 
 @Api(name = "calendar", version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = { Constants.WEB_CLIENT_ID,
@@ -19,11 +21,12 @@ public class CalendarAPI {
 			throw new UnauthorizedException("Authorization required");
 		}
 
-		// TODO: retrieve calendar from datastore
-
-		// if it does not exists
-		Calendar calendar = new Calendar(user.getUserId());
-		ObjectifyService.ofy().save().entity(calendar).now();
+		Key<Calendar> key = Key.create(Calendar.class, user.getUserId());
+		Calendar calendar = ObjectifyService.ofy().load().key(key).now();
+		if (calendar == null) {
+			calendar = new Calendar(user.getUserId());
+			ObjectifyService.ofy().save().entity(calendar).now();
+		}
 
 		return calendar;
 	}
@@ -35,12 +38,20 @@ public class CalendarAPI {
 			throw new UnauthorizedException("Authorization required");
 		}
 
-		// TODO: retrieve calendar from datastore
+		Key<Calendar> key = Key.create(Calendar.class, user.getUserId());
+		Calendar calendar = ObjectifyService.ofy().load().key(key).now();
+		if (calendar == null) {
+			calendar = new Calendar(user.getUserId());
+		}
 
-		// if it does not exists
-		Calendar calendar = new Calendar(user.getUserId());
-		calendar.setFromDate(Calendar.DATE_FORMAT.parse(fromDate));
-		calendar.setToDate(Calendar.DATE_FORMAT.parse(toDate));
+		if (fromDate != null) {
+			calendar.setFromDate(Calendar.DATE_FORMAT.parse(fromDate));
+		}
+
+		if (toDate != null) {
+			calendar.setToDate(Calendar.DATE_FORMAT.parse(toDate));
+		}
+
 		ObjectifyService.ofy().save().entity(calendar).now();
 
 		return calendar;
