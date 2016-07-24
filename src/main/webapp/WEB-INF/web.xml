@@ -42,12 +42,12 @@
 	</security-constraint>
 
 	<servlet>
-		<servlet-name>StaticDataLoadServlet</servlet-name>
-		<servlet-class>com.example.appengine.servlet.StaticDataLoadServlet</servlet-class>
+		<servlet-name>StaticDataServlet</servlet-name>
+		<servlet-class>com.example.appengine.servlet.StaticDataServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>StaticDataLoadServlet</servlet-name>
-		<url-pattern>/tasks/static_data_load</url-pattern>
+		<servlet-name>StaticDataServlet</servlet-name>
+		<url-pattern>/tasks/static_data</url-pattern>
 	</servlet-mapping>
 	<security-constraint>
 		<web-resource-collection>

@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
-public class StaticDataLoadServlet extends HttpServlet {
-	private static final Logger LOGGER = Logger.getLogger(StaticDataLoadServlet.class.getName());
+public class WikipediaSourceServlet extends HttpServlet {
+	private static final Logger LOGGER = Logger.getLogger(WikipediaSourceServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOGGER.info("loading data!!!!!!!!!!!!!!");
+		LOGGER.info("loading wikipedia data!!!!!!!!!!!!!!");
 	}
 }

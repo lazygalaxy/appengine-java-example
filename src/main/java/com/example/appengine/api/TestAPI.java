@@ -8,8 +8,8 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.ObjectifyService;
 
-@Api(name = "staticdata", version = "v1", clientIds = { Constants.API_EXPLORER_CLIENT_ID })
-public class StaticDataAPI {
+@Api(name = "test", version = "v1", clientIds = { Constants.API_EXPLORER_CLIENT_ID })
+public class TestAPI {
 	@ApiMethod(name = "loadcountry", path = "loadcountry")
 	public void loadCountry() throws Exception {
 		final Queue queue = QueueFactory.getDefaultQueue();
@@ -18,6 +18,9 @@ public class StaticDataAPI {
 
 	@ApiMethod(name = "loadcity", path = "loadcity")
 	public void loadCity() throws Exception {
+	}
 
+	@ApiMethod(name = "loadwikipedia", path = "loadwikipedia")
+	public void loadWikipedia() throws Exception {
 	}
 }
