@@ -13,8 +13,9 @@ public class WikipediaSourceServlet extends HttpServlet {
 	private static final Logger LOGGER = Logger.getLogger(WikipediaSourceServlet.class.getName());
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOGGER.info("loading wikipedia data!!!!!!!!!!!!!!");
+		String title = request.getParameter("title");
+		LOGGER.info("loading " + title + " wikipedia data!!!!!!!!!!!!!!");
 	}
 }

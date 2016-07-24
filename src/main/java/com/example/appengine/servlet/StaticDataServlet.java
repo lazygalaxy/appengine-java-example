@@ -13,8 +13,9 @@ public class StaticDataServlet extends HttpServlet {
 	private static final Logger LOGGER = Logger.getLogger(StaticDataServlet.class.getName());
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		LOGGER.info("loading static data!!!!!!!!!!!!!!");
+		String data = request.getParameter("data");
+		LOGGER.info("loading " + data + " static data!!!!!!!!!!!!!!");
 	}
 }

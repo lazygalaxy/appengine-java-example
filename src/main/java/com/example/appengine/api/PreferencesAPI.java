@@ -15,7 +15,7 @@ import com.googlecode.objectify.ObjectifyService;
 		Constants.API_EXPLORER_CLIENT_ID, Constants.ANDROID_CLIENT_ID,
 		Constants.IOS_CLIENT_ID }, audiences = { Constants.ANDROID_AUDIENCE })
 public class PreferencesAPI {
-	@ApiMethod(name = "get", path = "get")
+	@ApiMethod(name = "get", path = "get", httpMethod = ApiMethod.HttpMethod.GET)
 	public Preferences get(User user) throws Exception {
 		if (user == null) {
 			throw new UnauthorizedException("Authorization required");
@@ -31,7 +31,7 @@ public class PreferencesAPI {
 		return preferences;
 	}
 
-	@ApiMethod(name = "addDate", path = "addDate", httpMethod = "post")
+	@ApiMethod(name = "addDate", path = "addDate", httpMethod = ApiMethod.HttpMethod.POST)
 	public Preferences addDate(User user, @Named("date") String date) throws Exception {
 		if (user == null) {
 			throw new UnauthorizedException("Authorization required");
@@ -52,7 +52,7 @@ public class PreferencesAPI {
 		return preferences;
 	}
 
-	@ApiMethod(name = "removeDate", path = "removeDate", httpMethod = "post")
+	@ApiMethod(name = "removeDate", path = "removeDate", httpMethod = ApiMethod.HttpMethod.POST)
 	public Preferences removeDate(User user, @Named("date") String date) throws Exception {
 		if (user == null) {
 			throw new UnauthorizedException("Authorization required");
