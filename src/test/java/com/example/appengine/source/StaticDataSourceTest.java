@@ -11,6 +11,9 @@ public class StaticDataSourceTest {
 	@Test
 	public void testCountry() throws Exception {
 		Map<String, Country> countryMap = StaticDataSource.processCountry();
+
 		Assert.assertEquals(249, countryMap.size());
+		Assert.assertEquals("Taiwan, Province of China", countryMap.get("TW").getName());
+
 	}
 }

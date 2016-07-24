@@ -53,7 +53,7 @@ public class StaticDataSource {
 			if (element.startsWith("\"")) {
 				newElement = element.substring(1, element.length());
 			} else if (element.endsWith("\"")) {
-				newElement += element.substring(element.length() - 1);
+				newElement += "," + element.substring(0, element.length() - 1);
 				newData.add(newElement);
 				newElement = null;
 			} else if (newElement != null) {

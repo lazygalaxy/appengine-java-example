@@ -22,17 +22,28 @@ public class StaticDataServlet extends HttpServlet {
 			String data = request.getParameter("data");
 			LOGGER.info("loading " + data + " static data");
 			if (data.equals("country")) {
-				Map<String, Country> countryMap = StaticDataSource.processCountry();
-				for (Country country : countryMap.values()) {
-					ObjectifyService.ofy().save().entity(country).now();
-				}
+				handleCountry();
 			}
 			if (data.equals("city")) {
-
+				handleCity();
 			}
 			LOGGER.info("completed " + data + " static data");
 		} catch (Exception e) {
 			throw new ServletException(e);
+		}
+	}
+
+	private void handleCountry() throws Exception {
+		Map<String, Country> countryMap = StaticDataSource.processCountry();
+		for (Country country : countryMap.values()) {
+			ObjectifyService.ofy().save().entity(country).now();
+		}
+	}
+
+	private void handleCity() throws Exception {
+		Map<String, Country> countryMap = StaticDataSource.processCountry();
+		for (Country country : countryMap.values()) {
+			ObjectifyService.ofy().save().entity(country).now();
 		}
 	}
 }
