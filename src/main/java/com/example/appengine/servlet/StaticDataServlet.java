@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.appengine.domain.City;
 import com.example.appengine.domain.Country;
 import com.example.appengine.source.StaticDataSource;
 import com.googlecode.objectify.ObjectifyService;
@@ -41,9 +42,9 @@ public class StaticDataServlet extends HttpServlet {
 	}
 
 	private void handleCity() throws Exception {
-		Map<String, Country> countryMap = StaticDataSource.processCountry();
-		for (Country country : countryMap.values()) {
-			ObjectifyService.ofy().save().entity(country).now();
+		Map<String, City> cityMap = StaticDataSource.processCity();
+		for (City city : cityMap.values()) {
+			ObjectifyService.ofy().save().entity(city).now();
 		}
 	}
 }

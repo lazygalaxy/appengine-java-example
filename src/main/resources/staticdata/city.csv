@@ -1,12 +1,12 @@
-name,country,type
-Athens,GR,city
-Thessaloniki,GR,city
-Pretoria,ZA,city
-Zurich,CH,city
-Barcelona,ES,city
-Florence,IT,city
-Milan,IT,city
-Rome,IT,city
-Los Angeles,US,city
-New York,US,city
-Cairo,EG,city
+name,country
+Athens,GR
+Thessaloniki,GR
+Pretoria,ZA
+Zurich,CH
+Barcelona,ES
+Florence,IT
+Milan,IT
+Rome,IT
+Los Angeles,US
+New York,US
+Cairo,EG

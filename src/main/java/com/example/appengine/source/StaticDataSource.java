@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import com.example.appengine.domain.City;
 import com.example.appengine.domain.Country;
 
 public class StaticDataSource {
@@ -39,6 +40,32 @@ public class StaticDataSource {
 
 		br.close();
 		return countryMap;
+	}
+
+	public static Map<String, City> processCity() throws Exception {
+		File file = new File(StaticDataSource.class.getClassLoader().getResource("staticdata/city.csv").getFile());
+
+		Map<String, City> cityMap = new HashMap<String, City>();
+
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String line = br.readLine();
+		while ((line = br.readLine()) != null) {
+			String[] info = line.split(",");
+			if (line.contains("\"")) {
+				info = processDoubleQuotes(info);
+			}
+
+			if (info.length != 2) {
+				LOGGER.warning("malformated csv file row: " + Arrays.toString(info));
+				continue;
+			}
+
+			City city = new City(info[0], info[1]);
+			cityMap.put(city.getName(), city);
+		}
+
+		br.close();
+		return cityMap;
 	}
 
 	private static String[] processDoubleQuotes(String[] data) {
