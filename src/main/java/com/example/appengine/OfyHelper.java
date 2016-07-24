@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.example.appengine.domain.Calendar;
+import com.example.appengine.domain.Preferences;
 import com.example.appengine.domain.City;
 import com.example.appengine.domain.Country;
 import com.googlecode.objectify.ObjectifyService;
@@ -22,7 +22,7 @@ public class OfyHelper implements ServletContextListener {
 
 		// This will be invoked as part of a warmup request, or the first user
 		// request if no warmup request.
-		ObjectifyService.register(Calendar.class);
+		ObjectifyService.register(Preferences.class);
 		ObjectifyService.register(City.class);
 		ObjectifyService.register(Country.class);
 	}
