@@ -9,7 +9,7 @@ import com.google.appengine.repackaged.com.google.gson.JsonParser;
 import com.google.appengine.repackaged.com.google.gson.stream.JsonReader;
 
 public class WikipediaSource {
-	public static Wikipedia execute(JsonReader reader) {
+	public static Wikipedia process(JsonReader reader) {
 		JsonElement element = new JsonParser().parse(reader);
 
 		element = element.getAsJsonObject().get("query").getAsJsonObject().get("pages");

@@ -1,6 +1,5 @@
 package com.example.appengine.servlet;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -13,9 +12,12 @@ public class WikipediaSourceServlet extends HttpServlet {
 	private static final Logger LOGGER = Logger.getLogger(WikipediaSourceServlet.class.getName());
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String title = request.getParameter("title");
-		LOGGER.info("loading " + title + " wikipedia data!!!!!!!!!!!!!!");
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+		try {
+			String title = request.getParameter("title");
+			LOGGER.info("loading " + title + " wikipedia data!!!!!!!!!!!!!!");
+		} catch (Exception e) {
+			throw new ServletException(e);
+		}
 	}
 }

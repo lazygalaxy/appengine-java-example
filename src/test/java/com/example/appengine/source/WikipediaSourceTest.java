@@ -14,7 +14,7 @@ public class WikipediaSourceTest {
 	public void testFlorence() throws Exception {
 		File file = new File(getClass().getClassLoader().getResource("wikipedia/Florence.json").getFile());
 		JsonReader reader = new JsonReader(new FileReader(file));
-		Wikipedia wikipedia = WikipediaSource.execute(reader);
+		Wikipedia wikipedia = WikipediaSource.process(reader);
 
 		Assert.assertEquals("Florence", wikipedia.getTitle());
 	}
@@ -23,7 +23,7 @@ public class WikipediaSourceTest {
 	public void testHeraionOfSamos() throws Exception {
 		File file = new File(getClass().getClassLoader().getResource("wikipedia/Heraion_of_Samos.json").getFile());
 		JsonReader reader = new JsonReader(new FileReader(file));
-		Wikipedia wikipedia = WikipediaSource.execute(reader);
+		Wikipedia wikipedia = WikipediaSource.process(reader);
 
 		Assert.assertEquals("Heraion of Samos", wikipedia.getTitle());
 	}
@@ -32,7 +32,7 @@ public class WikipediaSourceTest {
 	public void testPythagoreion() throws Exception {
 		File file = new File(getClass().getClassLoader().getResource("wikipedia/Pythagoreion.json").getFile());
 		JsonReader reader = new JsonReader(new FileReader(file));
-		Wikipedia wikipedia = WikipediaSource.execute(reader);
+		Wikipedia wikipedia = WikipediaSource.process(reader);
 
 		Assert.assertEquals("Pythagoreion", wikipedia.getTitle());
 	}
@@ -41,7 +41,7 @@ public class WikipediaSourceTest {
 	public void testUffizi() throws Exception {
 		File file = new File(getClass().getClassLoader().getResource("wikipedia/Uffizi.json").getFile());
 		JsonReader reader = new JsonReader(new FileReader(file));
-		Wikipedia wikipedia = WikipediaSource.execute(reader);
+		Wikipedia wikipedia = WikipediaSource.process(reader);
 
 		Assert.assertEquals("Uffizi", wikipedia.getTitle());
 	}
@@ -51,7 +51,7 @@ public class WikipediaSourceTest {
 		File file = new File(getClass().getClassLoader()
 				.getResource("wikipedia/List_of_World_Heritage_Sites_by_year_of_inscription.json").getFile());
 		JsonReader reader = new JsonReader(new FileReader(file));
-		Wikipedia wikipedia = WikipediaSource.execute(reader);
+		Wikipedia wikipedia = WikipediaSource.process(reader);
 
 		Assert.assertEquals("List of World Heritage Sites by year of inscription", wikipedia.getTitle());
 	}
