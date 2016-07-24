@@ -31,7 +31,7 @@ public class PreferencesAPI {
 		return preferences;
 	}
 
-	@ApiMethod(name = "add_date", path = "add_date", httpMethod = "post")
+	@ApiMethod(name = "addDate", path = "addDate", httpMethod = "post")
 	public Preferences addDate(User user, @Named("date") String date) throws Exception {
 		if (user == null) {
 			throw new UnauthorizedException("Authorization required");
@@ -52,7 +52,7 @@ public class PreferencesAPI {
 		return preferences;
 	}
 
-	@ApiMethod(name = "remove_date", path = "remove_date", httpMethod = "post")
+	@ApiMethod(name = "removeDate", path = "removeDate", httpMethod = "post")
 	public Preferences removeDate(User user, @Named("date") String date) throws Exception {
 		if (user == null) {
 			throw new UnauthorizedException("Authorization required");
