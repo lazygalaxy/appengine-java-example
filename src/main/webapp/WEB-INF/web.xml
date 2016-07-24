@@ -41,10 +41,21 @@
 		</user-data-constraint>
 	</security-constraint>
 
-	<!-- servlet> <servlet-name>StaticDataLoadServlet</servlet-name> <servlet-class>com.example.appengine.servlet.StaticDataLoadServlet</servlet-class> 
-		</servlet> <servlet-mapping> <servlet-name>StaticDataLoadServlet</servlet-name> 
-		<url-pattern>/tasks/static_data_load</url-pattern> </servlet-mapping> < security-constraint> 
-		<web-resource-collection> <web-resource-name>tasks</web-resource-name> <url-pattern>/tasks/*</url-pattern> 
-		</web-resource-collection> <auth-constraint> <role-name>admin</role-name> 
-		</auth-constraint> </security-constraint -->
+	<servlet>
+		<servlet-name>StaticDataLoadServlet</servlet-name>
+		<servlet-class>com.example.appengine.servlet.StaticDataLoadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>StaticDataLoadServlet</servlet-name>
+		<url-pattern>/tasks/static_data_load</url-pattern>
+	</servlet-mapping>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>tasks</web-resource-name>
+			<url-pattern>/tasks/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
 </web-app>

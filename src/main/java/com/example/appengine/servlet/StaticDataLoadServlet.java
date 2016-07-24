@@ -1,4 +1,4 @@
-package com.example.appengine.servelt;
+package com.example.appengine.servlet;
 
 import java.io.IOException;
 import java.util.logging.Logger;
