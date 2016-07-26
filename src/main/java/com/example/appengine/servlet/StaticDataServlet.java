@@ -17,8 +17,9 @@ import com.googlecode.objectify.ObjectifyService;
 public class StaticDataServlet extends HttpServlet {
 	private static final Logger LOGGER = Logger.getLogger(StaticDataServlet.class.getName());
 
+	// http://localhost:8080/tasks/static_data?data=xyz
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
 			String data = request.getParameter("data");
 			LOGGER.info("loading " + data + " static data");
