@@ -4,8 +4,12 @@ import com.google.appengine.api.datastore.GeoPt;
 
 public class Wikipedia {
 	private String title;
+	private String[] links;
 	private GeoPt location;
 	private String intro;
+
+	private String infobox;
+	private String content;
 
 	@SuppressWarnings("unused")
 	private Wikipedia() {
@@ -17,6 +21,14 @@ public class Wikipedia {
 
 	public String getTitle() {
 		return title;
+	}
+
+	public String[] getLinks() {
+		return links;
+	}
+
+	public void setLinks(String[] links) {
+		this.links = links;
 	}
 
 	public GeoPt getLocation() {
@@ -33,5 +45,21 @@ public class Wikipedia {
 
 	public void setIntro(String intro) {
 		this.intro = intro;
+	}
+
+	public String getInfobox() {
+		return infobox;
+	}
+
+	public void setInfobox(String infobox) {
+		this.infobox = infobox.trim();
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content.trim();
 	}
 }
