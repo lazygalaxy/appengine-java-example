@@ -1,14 +1,20 @@
 package com.example.appengine.domain;
 
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.appengine.api.datastore.GeoPt;
 
 public class Wikipedia {
 	private String title;
-	private String[] links;
+	private Set<String> links = new HashSet<String>();
+	private Set<String> tags = new HashSet<String>();
+	private Map<String, String> properties = new LinkedHashMap<>();
 	private GeoPt location;
 	private String intro;
 
-	private String infobox;
 	private String content;
 
 	@SuppressWarnings("unused")
@@ -16,19 +22,51 @@ public class Wikipedia {
 	}
 
 	public Wikipedia(String title) {
-		this.title = title;
+		this.title = title.trim();
 	}
 
 	public String getTitle() {
 		return title;
 	}
 
-	public String[] getLinks() {
+	public Set<String> getLinks() {
 		return links;
 	}
 
-	public void setLinks(String[] links) {
+	public void addLink(String link) {
+		this.links.add(link.trim());
+	}
+
+	public void setLinks(Set<String> links) {
 		this.links = links;
+	}
+
+	public Set<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<String> tags) {
+		this.tags = tags;
+	}
+
+	public void addTag(String tag) {
+		this.tags.add(tag.trim().toUpperCase());
+	}
+
+	public Map<String, String> getProperties() {
+		return properties;
+	}
+
+	public String getProperty(String key) {
+		return properties.get(key);
+	}
+
+	public void setProperty(String key, String value) {
+		this.properties.put(key, value);
+	}
+
+	public void removeProperty(String key) {
+		this.properties.remove(key);
 	}
 
 	public GeoPt getLocation() {
@@ -44,15 +82,7 @@ public class Wikipedia {
 	}
 
 	public void setIntro(String intro) {
-		this.intro = intro;
-	}
-
-	public String getInfobox() {
-		return infobox;
-	}
-
-	public void setInfobox(String infobox) {
-		this.infobox = infobox.trim();
+		this.intro = intro.trim();
 	}
 
 	public String getContent() {

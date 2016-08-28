@@ -17,7 +17,12 @@ public class WikipediaSourceTest {
 		Wikipedia wikipedia = WikipediaSource.process(reader);
 
 		Assert.assertEquals("Heraion of Samos", wikipedia.getTitle());
-		Assert.assertEquals(42, wikipedia.getLinks().length);
+		Assert.assertEquals(42, wikipedia.getLinks().size());
+		Assert.assertEquals(2, wikipedia.getTags().size());
+		Assert.assertEquals(17, wikipedia.getProperties().size());
+
+		Assert.assertEquals(37.67194747924805, wikipedia.getLocation().getLatitude(), 0);
+		Assert.assertEquals(26.885555267333984, wikipedia.getLocation().getLongitude(), 0);
 	}
 
 	// @Test
