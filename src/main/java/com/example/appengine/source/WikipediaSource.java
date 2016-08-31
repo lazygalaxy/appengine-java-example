@@ -72,7 +72,7 @@ public class WikipediaSource {
 				wikipedia.setContent(wikipedia.getContent().replace(fullMatch, tokens[0]));
 			} else if (tokens.length == 2) {
 				wikipedia.setContent(wikipedia.getContent().replace(fullMatch, tokens[1]));
-			} else if (tokens[0].startsWith("File:")) {
+			} else if (tokens[0].startsWith("File:") || tokens[0].startsWith("Image:")) {
 				// TODO: better process files to store photo information
 				wikipedia.setContent(wikipedia.getContent().replace(fullMatch, tokens[tokens.length - 1]));
 			} else {
@@ -84,62 +84,56 @@ public class WikipediaSource {
 
 	private static void processInfobox(Wikipedia wikipedia) throws SourceException {
 		String infobox = matchContentSplit(wikipedia, "\\{\\{Infobox", "\n\\}\\}", true);
-
-		String[] infoboxTokens = infobox.split("\\|");
-		wikipedia.addTag(infoboxTokens[0]);
-		for (int i = 1; i < infoboxTokens.length; i++) {
-			String[] keyValue = infoboxTokens[i].trim().split("=");
-			if (keyValue.length == 2) {
-				String key = keyValue[0].toUpperCase().trim().replaceAll(" ", "_");
-				String value = keyValue[1].trim();
-				wikipedia.setProperty(key, value);
-			} else {
-				// TODO: processing of certain properties does not work as
-				// expected
+		if (infobox != null) {
+			String[] infoboxTokens = infobox.split("\\|");
+			wikipedia.addTag(infoboxTokens[0]);
+			for (int i = 1; i < infoboxTokens.length; i++) {
+				String[] keyValue = infoboxTokens[i].trim().split("=");
+				if (keyValue.length == 2) {
+					String key = keyValue[0].toUpperCase().trim().replaceAll(" ", "_");
+					String value = keyValue[1].trim();
+					wikipedia.setProperty(key, value);
+				} else {
+					// TODO: processing of certain properties does not work as
+					// expected
+				}
 			}
-		}
 
-		String value = wikipedia.getProperty("NAME");
-		if (value != null && !value.equals(wikipedia.getTitle())) {
-			throw new SourceException("page conflict name");
-		} else {
-			wikipedia.removeProperty("NAME");
-		}
+			String value = wikipedia.getProperty("NAME");
+			if (value != null && !value.equals(wikipedia.getTitle())) {
+				throw new SourceException("page conflict name");
+			} else {
+				wikipedia.removeProperty("NAME");
+			}
 
-		value = wikipedia.getProperty("TYPE");
-		if (value != null) {
-			wikipedia.addTag(value);
-		}
-
-		for (int i = 1; i <= 10; i++) {
-			String key = "DESIGNATION" + i;
-			value = wikipedia.getProperty(key);
+			value = wikipedia.getProperty("TYPE");
 			if (value != null) {
 				wikipedia.addTag(value);
-				value = wikipedia.getProperty(key + "_TYPE");
-				wikipedia.addTag(value);
-			} else {
-				break;
+			}
+
+			for (int i = 1; i <= 10; i++) {
+				String key = "DESIGNATION" + i;
+				value = wikipedia.getProperty(key);
+				if (value != null) {
+					wikipedia.addTag(value);
+					value = wikipedia.getProperty(key + "_TYPE");
+					wikipedia.addTag(value);
+				} else {
+					break;
+				}
 			}
 		}
 	}
 
 	private static void processCoords(Wikipedia wikipedia) throws SourceException {
+		// try to get coords from properties
 		String value = wikipedia.getProperty("LATD");
 		if (value != null) {
 			try {
-				int latd = Integer.parseInt(wikipedia.getProperty("LATD"));
-				int latm = Integer.parseInt(wikipedia.getProperty("LATM"));
-				int lats = wikipedia.getProperty("LATS") == null ? 0 : Integer.parseInt(wikipedia.getProperty("LATS"));
-				// wikipedia.getProperty("LATNS");
-				int longd = Integer.parseInt(wikipedia.getProperty("LONGD"));
-				int longm = Integer.parseInt(wikipedia.getProperty("LONGM"));
-				int longs = wikipedia.getProperty("LONGS") == null ? 0
-						: Integer.parseInt(wikipedia.getProperty("LONGS"));
-				// wikipedia.getProperty("LONGEW");
-
-				float latitude = latd + latm / 60.0f + lats / 3600.0f;
-				float longitude = longd + longm / 60.0f + longs / 3600.0f;
+				float latitude = caluclateDecDeg(wikipedia.getProperty("LATD"), wikipedia.getProperty("LATM"),
+						wikipedia.getProperty("LATS"));
+				float longitude = caluclateDecDeg(wikipedia.getProperty("LONGD"), wikipedia.getProperty("LONGM"),
+						wikipedia.getProperty("LONGS"));
 
 				wikipedia.setLocation(new GeoPt(latitude, longitude));
 
@@ -156,18 +150,65 @@ public class WikipediaSource {
 				throw new SourceException("invalid coordination definition");
 			}
 		}
-		String coord = matchContentSplit(wikipedia, "\\{\\{coord|", "\\}\\}", true);
-		if (coord != null) {
-			System.out.println(coord);
+
+		// try to get coords from coord block
+		String coordMatch = matchContentSplit(wikipedia, "\\{\\{coord\\|", "\\}\\}", true);
+		if (coordMatch != null) {
+			String[] coords = coordMatch.split("\\|");
+			if (coords.length <= 6) {
+				float latitude = Float.parseFloat(coords[0]);
+				float longitude = Float.parseFloat(coords[2]);
+				wikipedia.setLocation(new GeoPt(latitude, longitude));
+			} else {
+				float latitude = caluclateDecDeg(coords[0], coords[1], coords[2]);
+				float longitude = caluclateDecDeg(coords[4], coords[5], coords[6]);
+				wikipedia.setLocation(new GeoPt(latitude, longitude));
+			}
 		}
-		// {{coord|37|42|4.35|N|26|52|7.62|E|type:landmark_region:GR_scale:20000|display=title}}
+	}
+
+	private static float caluclateDecDeg(String degStr, String minStr, String secStr) {
+		float deg = 0.0f;
+		float min = 0.0f;
+		float sec = 0.0f;
+
+		if (degStr != null) {
+			deg = Float.parseFloat(degStr);
+		}
+
+		if (minStr != null) {
+			min = Float.parseFloat(minStr);
+		}
+
+		if (secStr != null) {
+			sec = Float.parseFloat(secStr);
+		}
+
+		return deg + min / 60 + sec / 3600;
 	}
 
 	private static String matchContentSplit(Wikipedia wikipedia, String startToken, String endToken,
-			boolean removeContent) {
-		String match = wikipedia.getContent().split(startToken)[1];
-		match = match.split(endToken)[0];
-		return match;
+			boolean removeContent) throws SourceException {
+		String[] matchStart = wikipedia.getContent().split(startToken);
+		if (matchStart.length == 1) {
+			return null;
+		} else if (matchStart.length == 2) {
+			String[] matchEnd = matchStart[1].split(endToken);
+			if (matchEnd.length < 2) {
+				throw new SourceException("unexpected number of end tokens");
+			}
+			if (removeContent) {
+				// TODO: consider if this functionaity is necessary
+				// wikipedia.setContent(matchStart[0]);
+				// for (int i = 1; i < matchEnd.length; i++) {
+				// wikipedia.setContent(wikipedia.getContent() + matchEnd[1]);
+				// }
+
+			}
+			return matchEnd[0];
+		} else {
+			throw new SourceException("unexpected number of start tokens");
+		}
 	}
 
 	private static List<String> matchContentRegEx(Wikipedia wikipedia, String[] tokens, boolean removeContent,

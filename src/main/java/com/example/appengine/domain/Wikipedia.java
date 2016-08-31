@@ -44,15 +44,15 @@ public class Wikipedia {
 		return tags;
 	}
 
-	public void addTag(String tag) {
-		tag = tag.trim().toUpperCase();
-
-		// normalize the value of certain tags
-		if (tag.equals("WORLD HERITAGE SITE")) {
-			tag = "WHS";
+	public void addTag(String newTag) {
+		for (String tag : newTag.trim().toUpperCase().split(",")) {
+			tag = tag.trim();
+			// normalize the value of certain tags
+			if (tag.equals("WORLD HERITAGE SITE")) {
+				tag = "WHS";
+			}
+			this.tags.add(tag);
 		}
-
-		this.tags.add(tag);
 	}
 
 	public Map<String, String> getProperties() {
