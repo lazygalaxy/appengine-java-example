@@ -10,21 +10,19 @@ import com.example.appengine.domain.Wikipedia;
 import com.google.appengine.repackaged.com.google.gson.stream.JsonReader;
 
 public class WikipediaSourceTest {
-	@Test
-	public void testHeraionOfSamos() throws Exception {
-		File file = new File(getClass().getClassLoader().getResource("wikipedia/Example.json").getFile());
-		JsonReader reader = new JsonReader(new FileReader(file));
-		Wikipedia wikipedia = WikipediaSource.process(reader);
-
-		Assert.assertEquals("Heraion of Samos", wikipedia.getTitle());
-		Assert.assertEquals(42, wikipedia.getLinks().size());
-		Assert.assertEquals(2, wikipedia.getTags().size());
-		Assert.assertEquals(17, wikipedia.getProperties().size());
-
-		Assert.assertEquals(37.67194747924805, wikipedia.getLocation().getLatitude(), 0);
-		Assert.assertEquals(26.885555267333984, wikipedia.getLocation().getLongitude(), 0);
-	}
-
+	// @Test
+	// public void testHeraionOfSamos() throws Exception {
+	// File file = new
+	// File(getClass().getClassLoader().getResource("wikipedia/Example.json").getFile());
+	// JsonReader reader = new JsonReader(new FileReader(file));
+	// Wikipedia wikipedia = WikipediaSource.process(reader);
+	//
+	// test(wikipedia, "Heraion of Samos", 39, new String[] { "ANCIENT SITE",
+	// "SANCTUARY", "WHS", "CULTURAL" }, 42,
+	// 37.67194747924805f, 26.885555267333984f);
+	//
+	// }
+	//
 	// @Test
 	// public void testFlorence() throws Exception {
 	// File file = new
@@ -32,28 +30,19 @@ public class WikipediaSourceTest {
 	// JsonReader reader = new JsonReader(new FileReader(file));
 	// Wikipedia wikipedia = WikipediaSource.process(reader);
 	//
-	// Assert.assertEquals("Florence", wikipedia.getTitle());
+	// test(wikipedia, "Florence", 499, new String[] { "ITALIAN COMUNE" }, 38,
+	// 43.78333282470703f, 11.25f);
 	// }
 
-	// @Test
-	// public void testHeraionOfSamos() throws Exception {
-	// File file = new
-	// File(getClass().getClassLoader().getResource("wikipedia/Heraion_of_Samos.json").getFile());
-	// JsonReader reader = new JsonReader(new FileReader(file));
-	// Wikipedia wikipedia = WikipediaSource.process(reader);
-	//
-	// Assert.assertEquals("Heraion of Samos", wikipedia.getTitle());
-	// }
+	@Test
+	public void testPythagoreion() throws Exception {
+		File file = new File(getClass().getClassLoader().getResource("wikipedia/Pythagoreion.json").getFile());
+		JsonReader reader = new JsonReader(new FileReader(file));
+		Wikipedia wikipedia = WikipediaSource.process(reader);
 
-	// @Test
-	// public void testPythagoreion() throws Exception {
-	// File file = new
-	// File(getClass().getClassLoader().getResource("wikipedia/Pythagoreion.json").getFile());
-	// JsonReader reader = new JsonReader(new FileReader(file));
-	// Wikipedia wikipedia = WikipediaSource.process(reader);
-	//
-	// Assert.assertEquals("Pythagoreion", wikipedia.getTitle());
-	// }
+		test(wikipedia, "Pythagoreion", 17, new String[] { "CULTURAL", "WHS" }, 10, 37.67194747924805f,
+				26.885555267333984f);
+	}
 
 	// @Test
 	// public void testUffizi() throws Exception {
@@ -62,7 +51,9 @@ public class WikipediaSourceTest {
 	// JsonReader reader = new JsonReader(new FileReader(file));
 	// Wikipedia wikipedia = WikipediaSource.process(reader);
 	//
-	// Assert.assertEquals("Uffizi", wikipedia.getTitle());
+	// test(wikipedia, "Uffizi", 17, new String[] { "ANCIENT SITE", "SANCTUARY",
+	// "WHS", "CULTURAL" }, 42,
+	// 37.67194747924805f, 26.885555267333984f);
 	// }
 	//
 	// @Test
@@ -72,7 +63,39 @@ public class WikipediaSourceTest {
 	// JsonReader reader = new JsonReader(new FileReader(file));
 	// Wikipedia wikipedia = WikipediaSource.process(reader);
 	//
-	// Assert.assertEquals("List of World Heritage Sites by year of
-	// inscription", wikipedia.getTitle());
+	// test(wikipedia, "List of World Heritage Sites by year of inscription",
+	// 17,
+	// new String[] { "ANCIENT SITE", "SANCTUARY", "WHS", "CULTURAL" }, 42,
+	// 37.67194747924805f,
+	// 26.885555267333984f);
 	// }
+	//
+	// @Test
+	// public void testExample() throws Exception {
+	// File file = new
+	// File(getClass().getClassLoader().getResource("wikipedia/Example.json").getFile());
+	// JsonReader reader = new JsonReader(new FileReader(file));
+	// Wikipedia wikipedia = WikipediaSource.process(reader);
+	//
+	// test(wikipedia, "Heraion of Samos", 39, new String[] { "ANCIENT SITE",
+	// "SANCTUARY", "WHS", "CULTURAL" }, 42,
+	// 37.67194747924805f, 26.885555267333984f);
+	// }
+
+	private void test(Wikipedia wikipedia, String title, long totalLinks, String[] tags, long totalProps, float lat,
+			float lon) {
+		Assert.assertEquals(title, wikipedia.getTitle());
+
+		Assert.assertEquals(totalLinks, wikipedia.getLinks().size());
+
+		Assert.assertEquals(tags.length, wikipedia.getTags().size());
+		for (String tag : tags) {
+			Assert.assertEquals(true, wikipedia.getTags().contains(tag));
+		}
+
+		Assert.assertEquals(totalProps, wikipedia.getProperties().size());
+
+		Assert.assertEquals(lat, wikipedia.getLocation().getLatitude(), 0);
+		Assert.assertEquals(lon, wikipedia.getLocation().getLongitude(), 0);
+	}
 }

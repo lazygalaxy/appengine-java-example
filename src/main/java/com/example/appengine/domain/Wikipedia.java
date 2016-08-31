@@ -14,7 +14,6 @@ public class Wikipedia {
 	private Map<String, String> properties = new LinkedHashMap<>();
 	private GeoPt location;
 	private String intro;
-
 	private String content;
 
 	@SuppressWarnings("unused")
@@ -45,12 +44,15 @@ public class Wikipedia {
 		return tags;
 	}
 
-	public void setTags(Set<String> tags) {
-		this.tags = tags;
-	}
-
 	public void addTag(String tag) {
-		this.tags.add(tag.trim().toUpperCase());
+		tag = tag.trim().toUpperCase();
+
+		// normalize the value of certain tags
+		if (tag.equals("WORLD HERITAGE SITE")) {
+			tag = "WHS";
+		}
+
+		this.tags.add(tag);
 	}
 
 	public Map<String, String> getProperties() {
