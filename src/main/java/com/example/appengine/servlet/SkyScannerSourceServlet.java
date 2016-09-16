@@ -12,26 +12,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.example.appengine.domain.Wikipedia;
-import com.example.appengine.source.wikipedia.WikipediaSource;
 import com.google.appengine.repackaged.com.google.gson.JsonElement;
 import com.google.appengine.repackaged.com.google.gson.JsonParser;
-import com.googlecode.objectify.ObjectifyService;
 
 @SuppressWarnings("serial")
-public class WikipediaSourceServlet extends HttpServlet {
-	private static final Logger LOGGER = Logger.getLogger(WikipediaSourceServlet.class.getName());
+public class SkyScannerSourceServlet extends HttpServlet {
+	private static final Logger LOGGER = Logger.getLogger(SkyScannerSourceServlet.class.getName());
 
-	// http://localhost:8080/tasks/wikipedia_source?title=Pythagoreion
+	// http://localhost:8080/tasks/skyscanner_source
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
-			String title = request.getParameter("title");
-			LOGGER.info("start process wikipedia " + title);
-
 			URL url = new URL(
-					"https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&titles="
-							+ title);
+					"http://partners.api.skyscanner.net/apiservices/browsequotes/v1.0/CH/CHF/en-GB/CH/anywhere/2016-10/2016-11?apiKey=la915271491354291553495841285271");
 
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -41,17 +34,13 @@ public class WikipediaSourceServlet extends HttpServlet {
 			if (respCode == HttpURLConnection.HTTP_OK || respCode == HttpURLConnection.HTTP_NOT_FOUND) {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 				JsonElement element = new JsonParser().parse(reader);
-				Wikipedia wikipedia = WikipediaSource.process(element);
-				ObjectifyService.ofy().save().entity(wikipedia).now();
-				LOGGER.info(wikipedia.getIntro());
-
+				LOGGER.info(element.toString());
 				reader.close();
 			} else {
 				LOGGER.log(Level.SEVERE, "error " + conn.getResponseCode() + " " + conn.getResponseMessage());
 			}
 
-			LOGGER.info("end process wikipedia " + title);
-
+			LOGGER.info("get skyscanner data");
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}

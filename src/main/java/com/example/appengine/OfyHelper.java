@@ -5,9 +5,10 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import com.example.appengine.domain.Preferences;
 import com.example.appengine.domain.City;
 import com.example.appengine.domain.Country;
+import com.example.appengine.domain.Preferences;
+import com.example.appengine.domain.Wikipedia;
 import com.googlecode.objectify.ObjectifyService;
 
 /**
@@ -25,6 +26,7 @@ public class OfyHelper implements ServletContextListener {
 		ObjectifyService.register(Preferences.class);
 		ObjectifyService.register(City.class);
 		ObjectifyService.register(Country.class);
+		ObjectifyService.register(Wikipedia.class);
 	}
 
 	public void contextDestroyed(ServletContextEvent event) {

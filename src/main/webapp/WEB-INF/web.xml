@@ -36,6 +36,15 @@
 		<servlet-name>WikipediaSourceServlet</servlet-name>
 		<url-pattern>/tasks/wikipedia_source</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>SkyScannerSourceServlet</servlet-name>
+		<servlet-class>com.example.appengine.servlet.SkyScannerSourceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SkyScannerSourceServlet</servlet-name>
+		<url-pattern>/tasks/skyscanner_source</url-pattern>
+	</servlet-mapping>
 
 	<!--welcome-file-list> <welcome-file>index.html</welcome-file> </welcome-file-list -->
 

@@ -12,11 +12,13 @@ import java.util.logging.Logger;
 
 import com.example.appengine.domain.City;
 import com.example.appengine.domain.Country;
+import com.google.appengine.repackaged.com.google.gson.JsonElement;
+import com.google.appengine.repackaged.com.google.gson.JsonParser;
 
 public class StaticDataSource {
 	private static final Logger LOGGER = Logger.getLogger(StaticDataSource.class.getName());
 
-	public static Map<String, Country> processCountry() throws Exception {
+	public static Map<String, Country> processCountryCSV() throws Exception {
 		File file = new File(StaticDataSource.class.getClassLoader().getResource("staticdata/country.csv").getFile());
 
 		Map<String, Country> countryMap = new HashMap<String, Country>();
@@ -34,11 +36,28 @@ public class StaticDataSource {
 				continue;
 			}
 
-			Country country = new Country(info[0], info[1], info[2], info[3]);
+			Country country = new Country(info[1], info[0], info[2], info[3]);
 			countryMap.put(country.getIso2(), country);
 		}
 
 		br.close();
+		return countryMap;
+	}
+
+	public static Map<String, Country> processCountryJSON() throws Exception {
+		File file = new File(StaticDataSource.class.getClassLoader().getResource("staticdata/country.json").getFile());
+		JsonElement element = new JsonParser().parse(new FileReader(file));
+		element = element.getAsJsonObject().get("Countries");
+
+		Map<String, Country> countryMap = new HashMap<String, Country>();
+
+		for (JsonElement country : element.getAsJsonArray()) {
+			String code = country.getAsJsonObject().get("Code").getAsString();
+			String name = country.getAsJsonObject().get("Name").getAsString();
+
+			countryMap.put(code, new Country(code, name, null, null));
+		}
+
 		return countryMap;
 	}
 

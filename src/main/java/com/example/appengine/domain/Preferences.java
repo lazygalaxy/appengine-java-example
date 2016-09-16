@@ -16,7 +16,11 @@ public class Preferences {
 
 	@Id
 	private String userId;
+	private String currency;
+	private String originCity;
 	private Set<Date> dates = new TreeSet<Date>();
+	private Set<String> todoCities = new TreeSet<String>();
+	private Set<String> todoSites = new TreeSet<String>();
 
 	@SuppressWarnings("unused")
 	private Preferences() {

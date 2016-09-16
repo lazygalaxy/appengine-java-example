@@ -8,10 +8,10 @@ import com.googlecode.objectify.annotation.Index;
 @Entity
 @Cache
 public class Country {
-	@Index
-	private String name;
 	@Id
 	private String iso2;
+	@Index
+	private String name;
 	private String iso3;
 	private String num;
 
@@ -19,11 +19,15 @@ public class Country {
 	private Country() {
 	}
 
-	public Country(String name, String iso2, String iso3, String num) {
-		this.name = name;
+	public Country(String iso2, String name, String iso3, String num) {
 		this.iso2 = iso2;
+		this.name = name;
 		this.iso3 = iso3;
 		this.num = num;
+	}
+
+	public String getIso2() {
+		return iso2;
 	}
 
 	public String getName() {
@@ -32,14 +36,6 @@ public class Country {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getIso2() {
-		return iso2;
-	}
-
-	public void setIso2(String iso2) {
-		this.iso2 = iso2;
 	}
 
 	public String getIso3() {
@@ -57,5 +53,4 @@ public class Country {
 	public void setNum(String num) {
 		this.num = num;
 	}
-
 }

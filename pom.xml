@@ -63,6 +63,12 @@
 			<artifactId>objectify</artifactId>
 			<version>5.1.13</version>
 		</dependency>
+		<dependency>
+    		<groupId>info.bliki.wiki</groupId>
+    		<artifactId>bliki-core</artifactId>
+    		<version>3.1.0</version>
+		</dependency>
+		
 
 		<!-- Test Dependencies -->
 		<dependency>

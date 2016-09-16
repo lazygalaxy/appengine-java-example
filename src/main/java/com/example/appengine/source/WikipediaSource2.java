@@ -13,7 +13,7 @@ import com.google.appengine.repackaged.com.google.gson.JsonObject;
 import com.google.appengine.repackaged.com.google.gson.JsonParser;
 import com.google.appengine.repackaged.com.google.gson.stream.JsonReader;
 
-public class WikipediaSource {
+public class WikipediaSource2 {
 	public static Wikipedia process(JsonReader reader) throws SourceException {
 		JsonElement element = new JsonParser().parse(reader);
 
@@ -24,13 +24,17 @@ public class WikipediaSource {
 
 			Wikipedia wikipedia = new Wikipedia(object.get("title").getAsString());
 			// set full content
-			wikipedia.setContent(
+			wikipedia.setOriginalContent(
 					object.get("revisions").getAsJsonArray().get(0).getAsJsonObject().get("*").getAsString());
 
 			// remove from content items
 			// TODO: overview these to ensure important info is not removed
 			removeContent(wikipedia, new String[] { "<!--", "-->" });
 			removeContent(wikipedia, new String[] { "<ref>", "</ref>" });
+			// removeContent(wikipedia, new String[] { "{{", "}}" });
+
+			wikipedia.setOriginalContent(wikipedia.getOriginalContent().replaceAll("'''", ""));
+			wikipedia.setOriginalContent(wikipedia.getOriginalContent().replaceAll("&nbsp;", " "));
 
 			processLinks(wikipedia);
 			processInfobox(wikipedia);
@@ -53,15 +57,15 @@ public class WikipediaSource {
 	}
 
 	private static void removeContent(Wikipedia wikipedia, String[] tokens) {
-		Matcher matcher = getMatcher(tokens, wikipedia.getContent());
+		Matcher matcher = getMatcher(tokens, wikipedia.getOriginalContent());
 		while (matcher.find()) {
-			wikipedia.setContent(wikipedia.getContent().replace(matcher.group(), ""));
+			wikipedia.setOriginalContent(wikipedia.getOriginalContent().replace(matcher.group(), ""));
 		}
 	}
 
 	private static void processLinks(Wikipedia wikipedia) throws SourceException {
 		// find all links
-		Matcher matcher = getMatcher(new String[] { "[[", "]]" }, wikipedia.getContent());
+		Matcher matcher = getMatcher(new String[] { "[[", "]]" }, wikipedia.getOriginalContent());
 
 		// go through each link and replace the content accordingly
 		while (matcher.find()) {
@@ -69,12 +73,12 @@ public class WikipediaSource {
 			String match = fullMatch.substring(2, fullMatch.length() - 2);
 			String[] tokens = match.split("\\|");
 			if (tokens.length == 1) {
-				wikipedia.setContent(wikipedia.getContent().replace(fullMatch, tokens[0]));
+				wikipedia.setOriginalContent(wikipedia.getOriginalContent().replace(fullMatch, tokens[0]));
 			} else if (tokens.length == 2) {
-				wikipedia.setContent(wikipedia.getContent().replace(fullMatch, tokens[1]));
+				wikipedia.setOriginalContent(wikipedia.getOriginalContent().replace(fullMatch, tokens[1]));
 			} else if (tokens[0].startsWith("File:") || tokens[0].startsWith("Image:")) {
 				// TODO: better process files to store photo information
-				wikipedia.setContent(wikipedia.getContent().replace(fullMatch, tokens[tokens.length - 1]));
+				wikipedia.setOriginalContent(wikipedia.getOriginalContent().replace(fullMatch, tokens[tokens.length - 1]));
 			} else {
 				throw new SourceException(fullMatch + " link could not be processed");
 			}
@@ -189,7 +193,7 @@ public class WikipediaSource {
 
 	private static String matchContentSplit(Wikipedia wikipedia, String startToken, String endToken,
 			boolean removeContent) throws SourceException {
-		String[] matchStart = wikipedia.getContent().split(startToken);
+		String[] matchStart = wikipedia.getOriginalContent().split(startToken);
 		if (matchStart.length == 1) {
 			return null;
 		} else if (matchStart.length == 2) {
@@ -198,12 +202,11 @@ public class WikipediaSource {
 				throw new SourceException("unexpected number of end tokens");
 			}
 			if (removeContent) {
-				// TODO: consider if this functionaity is necessary
+				// TODO revisit this removal logi
 				// wikipedia.setContent(matchStart[0]);
 				// for (int i = 1; i < matchEnd.length; i++) {
 				// wikipedia.setContent(wikipedia.getContent() + matchEnd[1]);
 				// }
-
 			}
 			return matchEnd[0];
 		} else {
@@ -213,7 +216,7 @@ public class WikipediaSource {
 
 	private static List<String> matchContentRegEx(Wikipedia wikipedia, String[] tokens, boolean removeContent,
 			boolean removeTokens, int total) {
-		Matcher matcher = getMatcher(tokens, wikipedia.getContent());
+		Matcher matcher = getMatcher(tokens, wikipedia.getOriginalContent());
 
 		List<String> matchList = new ArrayList<String>();
 		while (matcher.find() && (matchList.size() < total || total == 0)) {
@@ -223,7 +226,7 @@ public class WikipediaSource {
 			}
 			matchList.add(match.trim());
 			if (removeContent) {
-				wikipedia.setContent(wikipedia.getContent().replace(match, ""));
+				wikipedia.setOriginalContent(wikipedia.getOriginalContent().replace(match, ""));
 			}
 		}
 		return matchList;

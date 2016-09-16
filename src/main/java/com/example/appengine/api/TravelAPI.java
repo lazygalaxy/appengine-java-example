@@ -13,6 +13,9 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.response.BadRequestException;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.appengine.api.taskqueue.TaskOptions;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cmd.Query;
@@ -20,6 +23,7 @@ import com.googlecode.objectify.cmd.Query;
 @Api(name = "travel", version = "v1", scopes = { Constants.EMAIL_SCOPE }, clientIds = { Constants.WEB_CLIENT_ID,
 		Constants.API_EXPLORER_CLIENT_ID, Constants.ANDROID_CLIENT_ID,
 		Constants.IOS_CLIENT_ID }, audiences = { Constants.ANDROID_AUDIENCE })
+
 public class TravelAPI {
 	@ApiMethod(name = "getCountry", path = "getCountry", httpMethod = ApiMethod.HttpMethod.GET)
 	public List<Country> getCountry(@Named("countries") List<String> countries) throws Exception {
@@ -68,5 +72,12 @@ public class TravelAPI {
 		Query<City> query = ObjectifyService.ofy().load().type(City.class);
 		query = query.filter(new FilterPredicate("countryIso2", FilterOperator.EQUAL, country));
 		return query.list();
+	}
+
+	@ApiMethod(name = "test", path = "test", httpMethod = ApiMethod.HttpMethod.GET)
+	public void test(@Named("title") String title) throws Exception {
+
+		Queue queue = QueueFactory.getDefaultQueue();
+		queue.add(TaskOptions.Builder.withUrl("/tasks/wikipedia_source").param("title", title));
 	}
 }

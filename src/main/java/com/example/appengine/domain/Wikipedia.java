@@ -6,15 +6,22 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.appengine.api.datastore.GeoPt;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
+@Entity
+@Cache
 public class Wikipedia {
+	@Id
 	private String title;
+
 	private Set<String> links = new HashSet<String>();
 	private Set<String> tags = new HashSet<String>();
 	private Map<String, String> properties = new LinkedHashMap<>();
 	private GeoPt location;
 	private String intro;
-	private String content;
+	private String originalContent;
 
 	@SuppressWarnings("unused")
 	private Wikipedia() {
@@ -47,6 +54,11 @@ public class Wikipedia {
 	public void addTag(String newTag) {
 		for (String tag : newTag.trim().toUpperCase().split(",")) {
 			tag = tag.trim();
+
+			if (tag.startsWith("[[") && tag.endsWith("]]")) {
+				tag = tag.substring(2, tag.length() - 2);
+			}
+
 			// normalize the value of certain tags
 			if (tag.equals("WORLD HERITAGE SITE")) {
 				tag = "WHS";
@@ -87,11 +99,11 @@ public class Wikipedia {
 		this.intro = intro.trim();
 	}
 
-	public String getContent() {
-		return content;
+	public String getOriginalContent() {
+		return originalContent;
 	}
 
-	public void setContent(String content) {
-		this.content = content.trim();
+	public void setOriginalContent(String content) {
+		this.originalContent = content.trim();
 	}
 }
